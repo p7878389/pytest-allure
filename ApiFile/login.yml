@@ -1,0 +1,4 @@
+login:
+  path: wps/rest/cart/v1/auth/{{apiKey}}/token
+  params:
+    secret :  {{encodeSecret}}
