@@ -7,9 +7,9 @@
 import os
 from os.path import dirname, abspath
 
-from BaseRequest.base_request import RestFulReplace
-from Config.global_dict import dict_init, get_file_path_config
-from Config.yaml_read import load_yaml
+from BaseRequest.base_request import BaseRequest
+from Config.global_dict import dict_init
+from Config.yaml_read import load_yaml, parse_api_case_file
 
 
 def runner_init():
@@ -22,7 +22,29 @@ def runner_init():
     load_yaml(system_config_file_path)
 
 
+def get_case_file_path_list():
+    project_root = dirname(dirname(abspath(__file__)))
+    api_case_file_path = os.path.join(project_root, 'ApiFile')
+    file_path_list = []
+    lookup_file(api_case_file_path, file_path_list)
+    return file_path_list
+
+
+def lookup_file(file_path: str, file_path_list: list):
+    files = os.listdir(file_path)
+    for file in files:
+        current_file_path = os.path.join(file_path, file)
+        if os.path.isdir(current_file_path):
+            lookup_file(current_file_path, file_path_list)
+        if current_file_path.endswith('.yml'):
+            file_path_list.append(current_file_path)
+
+
 if __name__ == '__main__':
     runner_init()
-    print(get_file_path_config())
-    RestFulReplace.url_replace(params="sss/{{apiKey}}")
+    file_path_list = get_case_file_path_list()
+    api_yml_content_list = []
+    for api_file_path in file_path_list:
+        apiCase = parse_api_case_file(api_file_path)
+        BaseRequest(apiCase.title, apiCase.path, apiCase.method, apiCase.params, apiCase.body, apiCase.host,
+                    apiCase.headers, apiCase.need_response).execute_request()

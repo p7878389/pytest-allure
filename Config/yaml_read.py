@@ -9,7 +9,7 @@ from urllib import parse
 
 import yaml
 
-from Config.global_dict import set_value, set_api_server_config, set_file_path_config
+from Config.global_dict import set_value, set_api_server_config, set_file_path_config, get_api_server_config
 
 
 def load_yaml(file_path: string):
@@ -21,6 +21,17 @@ def load_yaml(file_path: string):
     set_api_server_config(ApiServerConfig(yaml_dict['api-server']))
     set_file_path_config(FileDataConfig(yaml_dict['file_path']))
     set_value(file_path, yaml_dict)
+
+
+def parse_api_case_file(file_path: str):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        file_content = f.read()
+    content = yaml.load(file_content, Loader=yaml.FullLoader)
+    content['host'] = get_api_server_config().host
+    content.setdefault('body', None)
+    content.setdefault('headers', {})
+    content.setdefault('need_response', False)
+    return ApiCase(content)
 
 
 class ApiServerConfig:
@@ -42,4 +53,16 @@ class FileDataConfig:
         self.report_generate_file_data = None
         self.report_zip_file_path = None
         self.log_file_path = None
+        self.__dict__ = d
+
+
+class ApiCase:
+    def __init__(self, d):
+        self.title = str
+        self.host = str
+        self.path = str
+        self.params = {}
+        self.headers = {}
+        self.method = str
+        self.body = any
         self.__dict__ = d
