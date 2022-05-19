@@ -4,6 +4,7 @@
 # @Author  : martin.peng
 # @Site    : 
 # @File    : yaml_read.py
+import json
 import string
 
 import yaml
@@ -22,6 +23,15 @@ def parse_yaml_to_dict(file_path: str) -> dict:
     return yaml_dict
 
 
+def parse_json_to_dict(file_path: str) -> dict:
+    with open(file_path, 'r', encoding='utf-8') as f:
+        file_content = f.read()
+    content = json.loads(file_content)
+    json_dict = {}
+    json_dict.update(content)
+    return json_dict
+
+
 def parse_system_yaml(file_path: string):
     yaml_dict = parse_yaml_to_dict(file_path)
     set_api_server_config(ApiServerConfig(yaml_dict['api-server']))
@@ -31,12 +41,14 @@ def parse_system_yaml(file_path: string):
 
 
 def test_case_to_object(file_path: str) -> ApiCase:
-    content = parse_yaml_to_dict(file_path)
+    content = parse_json_to_dict(file_path)
     content['host'] = get_api_server_config().host
     content.setdefault('body', None)
     content.setdefault('headers', {})
     content.setdefault('need_response', False)
-    content.setdefault('response_script', '')
+    content.setdefault('post_script', '')
     content.setdefault('skip', False)
     content.setdefault('params', {})
+    content.setdefault('dependency', '')
+    content.setdefault('pre_script', '')
     return ApiCase(content)

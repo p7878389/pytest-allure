@@ -12,16 +12,16 @@ import pytest
 import requests
 
 from BaseRequest.base_request import BaseRequest
-from Config.global_dict import dict_init,set_value
 from Config.yaml_read import parse_system_yaml, test_case_to_object
 from Model.api import ApiCase
+from Config.global_dict import get_value,set_value
 
-api_case_list = []
+api_case_dict_list = []
+api_case_dict = {}
 ids = []
 
 
 def load_system_yaml():
-    dict_init()
     environ_name = os.environ.get("pytest-allure-environ");
     if environ_name is None or not environ_name.isspace():
         environ_name = 'test'
@@ -44,7 +44,7 @@ def lookup_api_case_file(file_path: str, file_path_list: list):
         current_file_path = os.path.join(file_path, file)
         if os.path.isdir(current_file_path):
             lookup_api_case_file(current_file_path, file_path_list)
-        if current_file_path.endswith('.yml'):
+        if current_file_path.endswith('.json'):
             file_path_list.append(current_file_path)
 
 
@@ -56,7 +56,32 @@ def parse_api_case_yml():
         api_case = test_case_to_object(api_file_path)
         if api_case.skip:
             continue
-        api_case_list.append(api_case.__dict__)
+        api_case_dict[api_case.title] = api_case
+    sort_api_case(api_case_dict)
+
+
+def sort_api_case(_api_case_dict):
+    sort_list = []
+    for key in list(_api_case_dict.keys()):
+        item = _api_case_dict.get(key)
+        if item.dependency == '':
+            sort_list.append(item)
+            _api_case_dict.pop(key)
+            _sort_api_case(_api_case_dict, sort_list, item)
+    global api_case_dict_list
+    for api_case_item in sort_list:
+        api_case_dict_list.append(api_case_item.__dict__)
+
+
+def _sort_api_case(_api_case_dict, dependency_list, item: ApiCase):
+    for key in list(_api_case_dict.keys()):
+        dependency_item = _api_case_dict.get(key)
+        dependency = dependency_item.dependency
+        if dependency == '' or dependency != item.title:
+            continue
+        _api_case_dict.pop(key)
+        dependency_list.append(dependency_item)
+        _sort_api_case(_api_case_dict, dependency_list, dependency_item)
 
 
 def _init_allure_properties(api_case: ApiCase):
@@ -72,10 +97,12 @@ parse_api_case_yml()
 class TestApiCase:
 
     @pytest.mark.usefixtures('setup')
-    @pytest.mark.parametrize('api_case_params', api_case_list)
+    @pytest.mark.parametrize('api_case_params', api_case_dict_list)
     def test_execute_request(self, api_case_params: dict):
         api_case = ApiCase(api_case_params)
         _init_allure_properties(api_case)
+        if api_case.pre_script != '':
+            exec(api_case.pre_script)
         base_request = BaseRequest(api_case.title, api_case.path, api_case.method, api_case.params, api_case.body,
                                    api_case.host,
                                    api_case.headers)
@@ -85,5 +112,5 @@ class TestApiCase:
                                     , headers=base_request.headers
                                     , data=base_request.body)
         assert response.status_code == 200
-        if api_case.response_script != '' and api_case.response_script is not None:
-            exec(api_case.response_script)
+        if api_case.post_script != '' and api_case.post_script is not None:
+            exec(api_case.post_script)

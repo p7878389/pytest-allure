@@ -12,15 +12,15 @@ import requests
 
 from BaseRequest.base_request import BaseRequest
 from Config.yaml_read import test_case_to_object
-from Runner.test_runner import parse_api_case_yml
 from Config.global_dict import set_value
+from Runner.test_runner import parse_api_case_yml
 
 
-@pytest.fixture()
+@pytest.fixture(scope='session')
 def setup():
     parse_api_case_yml()
     project_root = dirname(dirname(abspath(__file__)))
-    login_api_case_file_path = os.path.join(project_root, 'ApiFile\\' + 'login.yml')
+    login_api_case_file_path = os.path.join(project_root, 'ApiFile\\' + 'login.json')
     api_case = test_case_to_object(login_api_case_file_path)
     base_request = BaseRequest(api_case.title, api_case.path, api_case.method, api_case.params, api_case.body,
                                api_case.host,
@@ -31,5 +31,5 @@ def setup():
                                 , headers=base_request.headers
                                 , data=base_request.body)
     assert response.status_code == 200
-    if api_case.response_script != '' and api_case.response_script is not None:
-        exec(api_case.response_script)
+    if api_case.post_script != '' and api_case.post_script is not None:
+        exec(api_case.post_script)

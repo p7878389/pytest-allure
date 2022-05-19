@@ -51,9 +51,10 @@ class ApiCase:
         self.feature = any
         self.story = any
         self.description = any
-        self.need_response = False
         self.skip = False
-        self.response_script = str
+        self.post_script = str
+        self.dependency = ''
+        self.pre_script = ''
         self.__dict__ = d
 
     def __str__(self) -> str:

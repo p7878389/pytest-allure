@@ -1,7 +1,7 @@
 api-server:
-  host:
-  api_key:
-  secret:
+  host: https://stagingapi.watchmanpaymentsystems.com
+  api_key: 2bfc3aea-cf37-4341-8139-c4db84be7e17
+  secret: QsS/dF4IJWtq8gqGPyKp0+7MwM0MZC/mFsx9ggAGi7M=
 
 file_path:
   case_file_path: ../ApiFile

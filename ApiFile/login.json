@@ -1,0 +1,12 @@
+{
+  "title": "login",
+  "feature": "authorization",
+  "story": "login",
+  "description": "login",
+  "path": "/wps/rest/cart/v1/auth/{apiKey}/token",
+  "method": "GET",
+  "params": {
+    "secret": "{secret}"
+  },
+  "post_script": "set_value('token', response.text)"
+}

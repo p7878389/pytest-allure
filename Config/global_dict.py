@@ -10,7 +10,7 @@ _global_dict = {}
 api_server_config_name = "api_server_config"
 file_path_config_name = "file_path_config"
 logging_config_name = "logging_config"
-rest_ful_replace_key_dict = {'{apiKey}': 'api_key', '{secret}': 'secret', '{token}': 'token'}
+_rest_ful_replace_key_dict = {'{apiKey}': 'api_key', '{secret}': 'secret', '{token}': 'token'}
 
 
 def dict_init():
@@ -53,3 +53,19 @@ def get_logging_config() -> LoggingConfig:
 
 def set_logging_config(value: LoggingConfig):
     return set_value(logging_config_name, value)
+
+
+def set_replace_key_dict(key, value):
+    _rest_ful_replace_key_dict[key] = value
+
+
+def get_replace_key_dict(key):
+    return _rest_ful_replace_key_dict.get(key)
+
+
+def pop_replace_key_dict(key):
+    return _rest_ful_replace_key_dict.pop(key)
+
+
+def get_replace_dict_all():
+    return _rest_ful_replace_key_dict

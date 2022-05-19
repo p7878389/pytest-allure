@@ -7,17 +7,17 @@
 import json
 import re
 
-from Config.global_dict import get_value, rest_ful_replace_key_dict
+from Config.global_dict import get_value, get_replace_dict_all
 
 
 class RestFulReplace:
     @classmethod
-    def url_replace(cls, params: str):
-        for key, value in rest_ful_replace_key_dict.items():
+    def params_replace(cls, params: str):
+        for key, value in get_replace_dict_all().items():
             if params.find(key) >= 0:
                 if value is None or value == '':
                     value = key[1, len(key) - 1]
-                params = re.sub(r'\{.*?\}', get_value(value), params)
+                params = re.sub(r'' + key, get_value(value), params)
         return params
 
 
@@ -36,7 +36,7 @@ class BaseRequest:
     # origin_headers: dict
 
     def __init__(self, title, path, method, params: dict, body: any, host, headers: {}):
-        self.path = RestFulReplace.url_replace(path)
+        self.path = RestFulReplace.params_replace(path)
         self.method = method
         self.params = params
         self.host = host
@@ -45,19 +45,15 @@ class BaseRequest:
         self.title = title
         self.parse_body_content()
         if params is not None:
-            for key, value in params.items():
-                _value = value
-                if type(_value) == dict:
-                    for __key in _value.keys():
-                        _value = '{' + __key + '}'
-                params[key] = RestFulReplace.url_replace(_value)
+            params_json = json.dumps(params)
+            params_json = RestFulReplace.params_replace(params_json)
+            params = json.loads(params_json)
+            self.params = params
         if headers is not None:
-            for key, value in headers.items():
-                _value = value
-                if type(_value) == dict:
-                    for __key in _value.keys():
-                        _value = '{' + __key + '}'
-                headers[key] = RestFulReplace.url_replace(_value)
+            headers_json = json.dumps(headers)
+            headers_json = RestFulReplace.params_replace(headers_json)
+            headers = json.loads(headers_json)
+            self.headers = headers
 
     def parse_body_content(self):
         if self.body is None or self.body == '':
@@ -68,4 +64,4 @@ class BaseRequest:
         content_type = content_type.lower()
         if content_type == 'application/json':
             json_body = json.dumps(self.body)
-            self.body = RestFulReplace.url_replace(json_body)
+            self.body = RestFulReplace.params_replace(json_body)

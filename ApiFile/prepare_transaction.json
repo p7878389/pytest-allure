@@ -1,0 +1,25 @@
+{
+  "title": "prepare_transaction",
+  "feature": "transaction",
+  "story": "prepare_transaction",
+  "description": "prepare_transaction",
+  "path": "/wps/rest/cart/v1/auth/prepare_transaction",
+  "method": "POST",
+  "headers": {
+    "authorization": "{token}",
+    "api-key": "{apiKey}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "transaction": {
+      "charges": [
+        {
+          "quantity": 1,
+          "unitPrice": 1,
+          "saleCategory": "DC1"
+        }
+      ]
+    }
+  },
+  "post_script": "from ApiFile.prepare_transaction_script import post_script_prepare_transaction; post_script_prepare_transaction(response)"
+}
