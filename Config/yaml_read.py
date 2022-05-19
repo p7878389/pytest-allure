@@ -5,12 +5,13 @@
 # @Site    : 
 # @File    : yaml_read.py
 import json
+import os
 import string
 
 import yaml
 
-from Config.global_dict import set_value, set_api_server_config, set_file_path_config, get_api_server_config, \
-    set_logging_config
+from Config.global_dict import set_value, set_file_path_config, get_api_server_config, set_logging_config, \
+    set_api_server_config
 from Model.api import ApiServerConfig, FileDataConfig, ApiCase, LoggingConfig
 
 
@@ -34,7 +35,17 @@ def parse_json_to_dict(file_path: str) -> dict:
 
 def parse_system_yaml(file_path: string):
     yaml_dict = parse_yaml_to_dict(file_path)
-    set_api_server_config(ApiServerConfig(yaml_dict['api-server']))
+    api_server_config = ApiServerConfig(yaml_dict['api-server'])
+    if api_server_config.api_key is None or api_server_config.api_key == '':
+        api_server_config.api_key = os.environ.get('WPS_API_KEY')
+
+    if api_server_config.secret is None or api_server_config.secret == '':
+        api_server_config.secret = os.environ.get('WPS_SECRET')
+
+    if api_server_config.host is None or api_server_config.host == '':
+        api_server_config.host = os.environ.get('WPS_HOST')
+
+    set_api_server_config(api_server_config)
     set_file_path_config(FileDataConfig(yaml_dict['file_path']))
     set_logging_config(LoggingConfig(yaml_dict['logging']))
     set_value(file_path, yaml_dict)
