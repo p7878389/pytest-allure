@@ -5,64 +5,38 @@
 # @Site    : 
 # @File    : yaml_read.py
 import string
-from urllib import parse
 
 import yaml
 
-from Config.global_dict import set_value, set_api_server_config, set_file_path_config, get_api_server_config
+from Config.global_dict import set_value, set_api_server_config, set_file_path_config, get_api_server_config, \
+    set_logging_config
+from Model.api import ApiServerConfig, FileDataConfig, ApiCase, LoggingConfig
 
 
-def load_yaml(file_path: string):
+def parse_yaml_to_dict(file_path: str) -> dict:
     with open(file_path, 'r', encoding='utf-8') as f:
         file_content = f.read()
     content = yaml.load(file_content, Loader=yaml.FullLoader)
     yaml_dict = {}
     yaml_dict.update(content)
+    return yaml_dict
+
+
+def parse_system_yaml(file_path: string):
+    yaml_dict = parse_yaml_to_dict(file_path)
     set_api_server_config(ApiServerConfig(yaml_dict['api-server']))
     set_file_path_config(FileDataConfig(yaml_dict['file_path']))
+    set_logging_config(LoggingConfig(yaml_dict['logging']))
     set_value(file_path, yaml_dict)
 
 
-def parse_api_case_file(file_path: str):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        file_content = f.read()
-    content = yaml.load(file_content, Loader=yaml.FullLoader)
+def test_case_to_object(file_path: str) -> ApiCase:
+    content = parse_yaml_to_dict(file_path)
     content['host'] = get_api_server_config().host
     content.setdefault('body', None)
     content.setdefault('headers', {})
     content.setdefault('need_response', False)
+    content.setdefault('response_script', '')
+    content.setdefault('skip', False)
+    content.setdefault('params', {})
     return ApiCase(content)
-
-
-class ApiServerConfig:
-
-    def __init__(self, d):
-        self.host = str
-        self.api_Key = str
-        self.secret = str
-        self.__dict__ = d
-        if self.__dict__.get('secret'):
-            self.encodeSecret = parse.quote(self.__dict__.get('secret'))
-
-
-class FileDataConfig:
-
-    def __init__(self, d):
-        self.case_file_path = None
-        self.report_data_file_path = None
-        self.report_generate_file_data = None
-        self.report_zip_file_path = None
-        self.log_file_path = None
-        self.__dict__ = d
-
-
-class ApiCase:
-    def __init__(self, d):
-        self.title = str
-        self.host = str
-        self.path = str
-        self.params = {}
-        self.headers = {}
-        self.method = str
-        self.body = any
-        self.__dict__ = d

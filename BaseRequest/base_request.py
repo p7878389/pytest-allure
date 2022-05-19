@@ -4,24 +4,20 @@
 # @Author  : martin.peng
 # @Site    : 
 # @File    : base_request.py
-
+import json
 import re
 
-import requests
-
-from Config.global_dict import get_api_server_config, set_value
-
-restFulReplaceKeyDict = {'{apiKey}': 'api_key', '{secret}': 'secret'}
+from Config.global_dict import get_value, rest_ful_replace_key_dict
 
 
 class RestFulReplace:
     @classmethod
     def url_replace(cls, params: str):
-        for key, value in restFulReplaceKeyDict.items():
+        for key, value in rest_ful_replace_key_dict.items():
             if params.find(key) >= 0:
-                api_server_config = get_api_server_config()
-                # params = re.match(r'\{.*?\}', params)
-                params = re.sub(r'\{.*?\}', getattr(api_server_config, value), params)
+                if value is None or value == '':
+                    value = key[1, len(key) - 1]
+                params = re.sub(r'\{.*?\}', get_value(value), params)
         return params
 
 
@@ -35,17 +31,19 @@ class BaseRequest:
     response: str
     response_code: int
     need_response: bool
-    headers: dict
+    headers: {}
 
-    def __init__(self, title, path, method, params: dict, body: any, host, headers: dict, need_response):
+    # origin_headers: dict
+
+    def __init__(self, title, path, method, params: dict, body: any, host, headers: {}):
         self.path = RestFulReplace.url_replace(path)
         self.method = method
         self.params = params
         self.host = host
-        self.need_response = need_response
         self.headers = headers
         self.body = body
         self.title = title
+        self.parse_body_content()
         if params is not None:
             for key, value in params.items():
                 _value = value
@@ -53,13 +51,21 @@ class BaseRequest:
                     for __key in _value.keys():
                         _value = '{' + __key + '}'
                 params[key] = RestFulReplace.url_replace(_value)
+        if headers is not None:
+            for key, value in headers.items():
+                _value = value
+                if type(_value) == dict:
+                    for __key in _value.keys():
+                        _value = '{' + __key + '}'
+                headers[key] = RestFulReplace.url_replace(_value)
 
-    def execute_request(self):
-        response = requests.request(method=self.method
-                                    , url=self.host + self.path
-                                    , params=self.params
-                                    , headers=self.headers
-                                    , data=self.body)
-        assert response.status_code == 200
-        if self.need_response:
-            set_value(self.title, response.text)
+    def parse_body_content(self):
+        if self.body is None or self.body == '':
+            return
+        content_type = self.headers.get('Content-Type')
+        if content_type is None or content_type == '':
+            return
+        content_type = content_type.lower()
+        if content_type == 'application/json':
+            json_body = json.dumps(self.body)
+            self.body = RestFulReplace.url_replace(json_body)

@@ -1,0 +1,42 @@
+title: /v1/auth/balance
+feature:  balance
+story:  /v1/auth/balance
+description: /v1/auth/balance
+path: /wps/rest/cart/v1/auth/balance
+method: POST
+headers:
+  authorization:  {token}
+  api-key:  {apiKey}
+  Content-Type: application/json
+body: {
+  "operator": "John Doe or OP1234",
+  "sourceAddress": "10.42.0.41",
+  "sourceId": "POS-1234",
+  "timestamp": "2011-12-03T10:15:30Z",
+  "transactionId": "TR12345678-ABCDE",
+  "receiptNumber": "R123456",
+  "orderNumber": "2020-03-1234",
+  "userData": "{ \"my_key\": \"a data value that I will want to use later\" }",
+  "customer": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": "123 3rd Street W",
+    "address2": "Apt. 221B",
+    "city": "Chicago",
+    "state": "IL",
+    "country": "US",
+    "postal": "84000",
+    "phone": "4355551212",
+    "email": "nobody@nowhere.com",
+    "id": "abc1234"
+  },
+  "payments": [
+    {
+      "apiKey": "2bfc3aea-cf37-4341-8139-c4db84be7e17",
+      "account": "45678901",
+      "secondaryId": "456",
+      "periodDesignator": "10/2018 or FA18"
+    }
+  ]
+}
+response_script: assert response.status_code == 200

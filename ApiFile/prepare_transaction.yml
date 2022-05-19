@@ -1,0 +1,22 @@
+title: prepare_transaction
+feature:  transaction
+story:  prepare_transaction
+description: prepare_transaction
+path: /wps/rest/cart/v1/auth/prepare_transaction
+method: POST
+headers:
+  authorization:  {token}
+  api-key:  {apiKey}
+  Content-Type: application/json
+body: {
+    "transaction": {
+        "charges": [
+            {
+                "quantity": 1,
+                "unitPrice": 1.00,
+                "saleCategory": "DC1"
+            }
+        ]
+    }
+}
+response_script: assert response.status_code == 200; set_value('prepare_transaction',response.text)

@@ -6,7 +6,7 @@
 import os
 
 from Config.global_dict import dict_init
-from Config.yaml_read import load_yaml
+from Config.yaml_read import parse_system_yaml
 
 
 # import Config.yaml_read from load_yaml
@@ -22,5 +22,5 @@ if __name__ == '__main__':
     environ_name = os.environ.get("pytest")
     if environ_name:
         environ_name = 'test'
-    load_yaml("D:\pythonworks\pytest-allure\config\config-" + environ_name + ".yaml")
+    parse_system_yaml("D:\pythonworks\pytest-allure\config\config-" + environ_name + ".yaml")
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

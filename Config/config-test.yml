@@ -1,9 +1,16 @@
 api-server:
-
+  host:
+  api_key:
+  secret:
 
 file_path:
   case_file_path: ../ApiFile
   report_data_file_path: ../Report/data/
   report_generate_file_data: ../Report/allure_raw/
   report_zip_file_path: ../Report/allure_raw/apiAutoTestReport.zip
-  log_file_path: ../log/运行日志{time}.log
+
+logging:
+  log_file_path: ../logs/
+  log_file_name:  pytest-allure-%Y-%m-%d.log
+  log_level:  debug
+  log_format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
