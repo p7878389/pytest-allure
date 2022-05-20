@@ -5,7 +5,7 @@ api-server:
 
 file_path:
   case_file_path: ../TestCase
-  report_data_file_path: ../Report/data/
+  report_data_file_path: ../Report/Data/
   report_generate_file_data: ../Report/allure_raw/
   report_zip_file_path: ../Report/allure_raw/apiAutoTestReport.zip
 

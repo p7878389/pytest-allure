@@ -7,6 +7,5 @@
   "method": "GET",
   "params": {
     "secret": "{{secret}}"
-  },
-  "post_script": "set_value('token', response.text)"
+  }
 }

@@ -1,0 +1,12 @@
+{
+  "title": "login",
+  "data": [
+    {
+      "path": "/wps/rest/cart/v1/auth/2bfc3aea-cf37-4341-8139-c4db84be7e17/token",
+      "headers": {},
+      "params": {
+        "secret": "QsS/dF4IJWtq8gqGPyKp0+7MwM0MZC/mFsx9ggAGi7M="
+      }
+    }
+  ]
+}

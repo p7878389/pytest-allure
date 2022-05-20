@@ -1,18 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2022/5/16 15:40
+# @Time    : 2022/5/20 16:31
 # @Author  : martin.peng
 # @Site    : 
-# @File    : test_runner.py
-
-import importlib
-
+# @File    : test_data.py
 import pytest
-import requests
 
-from BaseRequest.base_request import BaseRequest
-from Common.read_test_case import parse_api_case_json, init_allure_properties
-from Model.api import ApiCase
+from Runner.test_runner import parse_api_case_json
 
 global_dict = importlib.import_module('Config.global_dict')
 set_value = getattr(global_dict, 'set_value')
