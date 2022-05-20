@@ -10,5 +10,5 @@
     "api-key": "{{apiKey}}"
   },
   "body": {},
-  "post_script": "from TestCase.get_auth_id_script import post_script; post_script(response)"
+  "post_script": "from TestCase.Admin.get_auth_id_script import post_script; post_script(response)"
 }

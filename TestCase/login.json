@@ -1,6 +1,6 @@
 {
   "title": "login",
-  "feature": "authorization",
+  "feature": "login",
   "story": "login",
   "description": "login",
   "path": "/wps/rest/cart/v1/auth/{{apiKey}}/token",

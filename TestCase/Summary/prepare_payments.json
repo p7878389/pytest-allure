@@ -1,7 +1,7 @@
 {
   "dependency": "prepare_transaction",
   "title": "prepare_payments",
-  "feature": "transaction",
+  "feature": "Summary",
   "story": "prepare_payments",
   "description": "prepare_payments",
   "path": "/wps/rest/cart/v1/auth/prepare_payments",
@@ -21,5 +21,5 @@
     ]
   },
   "post_script": "assert response.status_code == 200; set_value('prepare_payments',response.text);",
-  "pre_script": "from TestCase.prepare_payments_script import pre_script_prepare_payments;pre_script_prepare_payments(api_case)"
+  "pre_script": "from TestCase.Summary.prepare_payments_script import pre_script_prepare_payments;pre_script_prepare_payments(api_case)"
 }

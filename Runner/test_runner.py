@@ -12,7 +12,7 @@ import pytest
 import requests
 
 from BaseRequest.base_request import BaseRequest
-from Config.yaml_read import parse_system_yaml, test_case_to_object
+from Config.yaml_read import parse_system_yaml, case_to_object
 from Model.api import ApiCase
 from Config.global_dict import get_value,set_value
 
@@ -53,7 +53,7 @@ def parse_api_case_yml():
     file_path_list = get_case_file_path_list()
     global ids
     for api_file_path in file_path_list:
-        api_case = test_case_to_object(api_file_path)
+        api_case = case_to_object(api_file_path)
         if api_case.skip:
             continue
         api_case_dict[api_case.title] = api_case

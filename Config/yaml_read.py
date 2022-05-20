@@ -51,7 +51,7 @@ def parse_system_yaml(file_path: string):
     set_value(file_path, yaml_dict)
 
 
-def test_case_to_object(file_path: str) -> ApiCase:
+def case_to_object(file_path: str) -> ApiCase:
     content = parse_json_to_dict(file_path)
     content['host'] = get_api_server_config().host
     content.setdefault('body', None)

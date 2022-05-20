@@ -13,5 +13,5 @@
     "clientUuid": "1"
   },
   "body": {},
-  "post_script": "from TestCase.current_reconciliation_script import current_reconciliation_post_script;current_reconciliation_post_script(response)"
+  "post_script": "from TestCase.Admin.current_reconciliation_script import current_reconciliation_post_script;current_reconciliation_post_script(response)"
 }

@@ -10,13 +10,13 @@ from os.path import dirname, abspath
 import pytest
 import requests
 
-from Config.yaml_read import test_case_to_object
+from Config.yaml_read import case_to_object
 from BaseRequest.base_request import BaseRequest
 from Runner.test_runner import init_allure_properties
 from Runner.test_runner import load_system_yaml
 from Runner.conftest import setup
 
-test_case_file_name = 'get_auth_id.json'
+test_case_file_name = 'Admin/clover_api_key.json'
 
 
 class TestCase:
@@ -27,7 +27,7 @@ class TestCase:
         project_root = dirname(dirname(abspath(__file__)))
         api_case_file_path = os.path.join(project_root, 'TestCase')
         api_case_file_path += '\\' + test_case_file_name
-        api_case = test_case_to_object(api_case_file_path)
+        api_case = case_to_object(api_case_file_path)
         init_allure_properties(api_case)
         if api_case.pre_script != '':
             exec(api_case.pre_script)

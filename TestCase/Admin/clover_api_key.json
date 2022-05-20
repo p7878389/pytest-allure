@@ -1,0 +1,16 @@
+{
+  "title": "cloverApiKey",
+  "feature": "admin",
+  "story": "/v1/admin/cloverApiKey",
+  "description": "Runs audit process for AuthVoids.",
+  "path": "/wps/rest/cart/v1/admin/cloverApiKey",
+  "method": "GET",
+  "headers": {
+    "authorization": "{{token}}",
+    "api-key": "{{apiKey}}"
+  },
+  "params": {
+  },
+  "body": {},
+  "post_script": "from TestCase.Admin.clover_api_key_script import post_script; post_script(response)"
+}
