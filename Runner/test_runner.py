@@ -32,7 +32,7 @@ def load_system_yaml():
 
 def get_case_file_path_list():
     project_root = dirname(dirname(abspath(__file__)))
-    api_case_file_path = os.path.join(project_root, 'ApiFile')
+    api_case_file_path = os.path.join(project_root, 'TestCase')
     file_path_list = []
     lookup_api_case_file(api_case_file_path, file_path_list)
     return file_path_list
@@ -84,7 +84,7 @@ def _sort_api_case(_api_case_dict, dependency_list, item: ApiCase):
         _sort_api_case(_api_case_dict, dependency_list, dependency_item)
 
 
-def _init_allure_properties(api_case: ApiCase):
+def init_allure_properties(api_case: ApiCase):
     allure.dynamic.title(api_case.title)
     allure.dynamic.story(api_case.story)
     allure.dynamic.description(api_case.description)
@@ -100,7 +100,7 @@ class TestApiCase:
     @pytest.mark.parametrize('api_case_params', api_case_dict_list)
     def test_execute_request(self, api_case_params: dict):
         api_case = ApiCase(api_case_params)
-        _init_allure_properties(api_case)
+        init_allure_properties(api_case)
         if api_case.pre_script != '':
             exec(api_case.pre_script)
         base_request = BaseRequest(api_case.title, api_case.path, api_case.method, api_case.params, api_case.body,
@@ -111,6 +111,7 @@ class TestApiCase:
                                     , params=base_request.params
                                     , headers=base_request.headers
                                     , data=base_request.body)
-        assert response.status_code == 200
         if api_case.post_script != '' and api_case.post_script is not None:
             exec(api_case.post_script)
+        else:
+            assert response.status_code == 200

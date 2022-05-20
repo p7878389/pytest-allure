@@ -10,7 +10,7 @@ _global_dict = {}
 api_server_config_name = "api_server_config"
 file_path_config_name = "file_path_config"
 logging_config_name = "logging_config"
-_rest_ful_replace_key_dict = {'{apiKey}': 'api_key', '{secret}': 'secret', '{token}': 'token'}
+# _rest_ful_replace_key_dict = {'{apiKey}': 'apiKey', '{secret}': 'secret', '{token}': 'token'}
 
 
 def dict_init():
@@ -24,14 +24,14 @@ def set_value(key, value):
 
 def get_value(key, default_value=None):
     try:
-        return _global_dict[key]
+        return _global_dict.get(key, default_value)
     except KeyError:
         return default_value
 
 
 def set_api_server_config(value: ApiServerConfig):
     set_value(api_server_config_name, value)
-    set_value('api_key', value.api_key)
+    set_value('apiKey', value.api_key)
     set_value('secret', value.secret)
 
 
@@ -55,17 +55,17 @@ def set_logging_config(value: LoggingConfig):
     return set_value(logging_config_name, value)
 
 
-def set_replace_key_dict(key, value):
-    _rest_ful_replace_key_dict[key] = value
+# def set_replace_key_dict(key, value):
+#     _rest_ful_replace_key_dict[key] = value
 
 
-def get_replace_key_dict(key):
-    return _rest_ful_replace_key_dict.get(key)
-
-
-def pop_replace_key_dict(key):
-    return _rest_ful_replace_key_dict.pop(key)
-
-
-def get_replace_dict_all():
-    return _rest_ful_replace_key_dict
+# def get_replace_key_dict(key):
+#     return _rest_ful_replace_key_dict.get(key)
+#
+#
+# def pop_replace_key_dict(key):
+#     return _rest_ful_replace_key_dict.pop(key)
+#
+#
+# def get_replace_dict_all():
+#     return _rest_ful_replace_key_dict

@@ -1,0 +1,14 @@
+{
+  "title": "runAudit",
+  "feature": "admin",
+  "story": "/v1/admin/runAudit",
+  "description": "Runs audit process for AuthVoids.",
+  "path": "/wps/rest/cart/v1/admin/runAudit",
+  "method": "GET",
+  "headers": {
+    "authorization": "{{token}}",
+    "api-key": "{{apiKey}}"
+  },
+  "body": {},
+  "post_script": "assert response.status_code == 200"
+}

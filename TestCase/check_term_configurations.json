@@ -1,0 +1,14 @@
+{
+  "title": "checkTermConfigurations",
+  "feature": "admin",
+  "story": "/v1/admin/checkTermConfigurations",
+  "description": "Runs audit process for AuthVoids.",
+  "path": "/wps/rest/cart/v1/admin/checkTermConfigurations",
+  "method": "GET",
+  "headers": {
+    "authorization": "{{token}}",
+    "api-key": "{{apiKey}}"
+  },
+  "body": {},
+  "post_script": "assert response.status_code == 200"
+}

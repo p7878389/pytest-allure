@@ -20,7 +20,7 @@ from Runner.test_runner import parse_api_case_yml
 def setup():
     parse_api_case_yml()
     project_root = dirname(dirname(abspath(__file__)))
-    login_api_case_file_path = os.path.join(project_root, 'ApiFile\\' + 'login.json')
+    login_api_case_file_path = os.path.join(project_root, 'TestCase\\' + 'login.json')
     api_case = test_case_to_object(login_api_case_file_path)
     base_request = BaseRequest(api_case.title, api_case.path, api_case.method, api_case.params, api_case.body,
                                api_case.host,

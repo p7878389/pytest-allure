@@ -6,8 +6,8 @@
   "path": "/wps/rest/cart/v1/auth/balance",
   "method": "POST",
   "headers": {
-    "authorization": "{token}",
-    "api-key": "{apiKey}",
+    "authorization": "{{token}}",
+    "api-key": "{{apiKey}}",
     "Content-Type": "application/json"
   },
   "body": {

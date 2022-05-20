@@ -1,0 +1,17 @@
+{
+  "title": "currentReconciliation",
+  "feature": "admin",
+  "story": "/v1/admin/currentReconciliation",
+  "description": "Get's the current Active reconciliation for the logged in key or the client uuid passed in",
+  "path": "/wps/rest/cart/v1/admin/currentReconciliation",
+  "method": "GET",
+  "headers": {
+    "authorization": "{{token}}",
+    "api-key": "{{apiKey}}"
+  },
+  "params": {
+    "clientUuid": "1"
+  },
+  "body": {},
+  "post_script": "from TestCase.current_reconciliation_script import current_reconciliation_post_script;current_reconciliation_post_script(response)"
+}

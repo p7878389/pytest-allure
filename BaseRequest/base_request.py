@@ -7,17 +7,26 @@
 import json
 import re
 
-from Config.global_dict import get_value, get_replace_dict_all
+from Config.global_dict import get_value
 
 
 class RestFulReplace:
     @classmethod
     def params_replace(cls, params: str):
-        for key, value in get_replace_dict_all().items():
-            if params.find(key) >= 0:
-                if value is None or value == '':
-                    value = key[1, len(key) - 1]
-                params = re.sub(r'' + key, get_value(value), params)
+        # for key, value in get_replace_dict_all().items():
+        #     if params.find(key) >= 0:
+        #         if value is None or value == '':
+        #             value = key[1, len(key) - 1]
+        #         params = re.sub(r'' + key, get_value(value), params)
+        # escape = re.escape(r'{.*}')
+        split_list = params.split('{{')
+        for split_str in split_list:
+            find_list = re.findall('.*}}', split_str)
+            find_set = set(find_list)
+            for item in find_set:
+                # _item = re.sub('\\{{', '', item)
+                item = re.sub('\\}}', '', item)
+                params = re.sub(r'{{' + item + '}}', get_value(item, ''), params)
         return params
 
 
@@ -65,3 +74,11 @@ class BaseRequest:
         if content_type == 'application/json':
             json_body = json.dumps(self.body)
             self.body = RestFulReplace.params_replace(json_body)
+
+
+if __name__ == '__main__':
+    # print(re.match('{{authId}}', '/v1/admin/getAuthId/{{authId}}'))
+    valid = re.escape(r'{{authId}}')
+    print(re.sub('\\{\\{authId\\}\\}', 'sss', '/v1/admin/getAuthId/{{authId}}/{{authId}}'))
+
+    print(re.sub('\\{\\{', '', '{{authId}}'))

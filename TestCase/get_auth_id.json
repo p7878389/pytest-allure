@@ -1,0 +1,14 @@
+{
+  "title": "getAuthId",
+  "feature": "admin",
+  "story": "/v1/admin/getAuthId/{uuid}",
+  "description": "Returns the saved AuthId for the passed in UUID.",
+  "path": "/wps/rest/cart/v1/admin/getAuthId/{{authId}}/{{authId}}",
+  "method": "GET",
+  "headers": {
+    "authorization": "{{{token}}}",
+    "api-key": "{{apiKey}}"
+  },
+  "body": {},
+  "post_script": "from TestCase.get_auth_id_script import post_script; post_script(response)"
+}
