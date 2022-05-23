@@ -12,7 +12,7 @@ from typing import List
 
 import allure
 
-from Config.yaml_read import parse_system_yaml, case_to_object
+from Config.yaml_read import parse_system_yaml, case_to_object, parse_test_data_to_object
 from Model.api import ApiCase
 
 
@@ -29,17 +29,17 @@ def get_case_file_path_list():
     project_root = dirname(dirname(abspath(__file__)))
     api_case_file_path = os.path.join(project_root, 'TestCase')
     file_path_list = []
-    lookup_api_case_file(api_case_file_path, file_path_list)
+    lookup_directory(api_case_file_path, file_path_list)
     return file_path_list
 
 
-def lookup_api_case_file(file_path: str, file_path_list: list):
+def lookup_directory(file_path: str, file_path_list: list, default_suffix='.json'):
     files = os.listdir(file_path)
     for file in files:
         current_file_path = os.path.join(file_path, file)
         if os.path.isdir(current_file_path):
-            lookup_api_case_file(current_file_path, file_path_list)
-        if current_file_path.endswith('.json'):
+            lookup_directory(current_file_path, file_path_list)
+        if current_file_path.endswith(default_suffix):
             file_path_list.append(current_file_path)
 
 
@@ -93,3 +93,15 @@ def init_allure_properties(api_case: ApiCase):
     allure.dynamic.story(api_case.story)
     allure.dynamic.description(api_case.description)
     allure.dynamic.feature(api_case.feature)
+
+
+def read_test_case_data() -> list:
+    test_case_data_list = []
+    project_root = dirname(dirname(abspath(__file__)))
+    test_case_data_file_path = os.path.join(project_root, 'Data')
+    file_path_list = []
+    lookup_directory(test_case_data_file_path, file_path_list)
+    for api_file_path in file_path_list:
+        test_case_data = parse_test_data_to_object(api_file_path)
+        test_case_data_list.append(test_case_data)
+    return test_case_data_list

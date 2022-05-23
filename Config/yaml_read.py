@@ -12,7 +12,7 @@ import yaml
 
 from Config.global_dict import set_value, set_file_path_config, get_api_server_config, set_logging_config, \
     set_api_server_config
-from Model.api import ApiServerConfig, FileDataConfig, ApiCase, LoggingConfig
+from Model.api import ApiServerConfig, FileDataConfig, ApiCase, LoggingConfig, TestCaseData, TestCase
 
 
 def parse_yaml_to_dict(file_path: str) -> dict:
@@ -63,3 +63,26 @@ def case_to_object(file_path: str) -> ApiCase:
     content.setdefault('dependency', '')
     content.setdefault('pre_script', '')
     return ApiCase(content)
+
+
+def parse_test_data_to_object(file_path: str) -> TestCase:
+    test_case_data_list = []
+    content = parse_json_to_dict(file_path)
+    content_data_dict = content.get('data', None)
+    # if isinstance(None, content_data_dict):
+    #     content['data'] = []
+    #     return TestCase(content)
+    if isinstance(content_data_dict, list):
+        for _content_data_dict in content_data_dict:
+            set_attributes(_content_data_dict)
+            test_case_data_list.append(TestCaseData(_content_data_dict))
+    content['data'] = test_case_data_list
+    return TestCase(content)
+
+
+def set_attributes(content: dict):
+    content.setdefault('body', None)
+    content.setdefault('headers', {})
+    content.setdefault('post_script', '')
+    content.setdefault('params', {})
+    content.setdefault('pre_script', '')

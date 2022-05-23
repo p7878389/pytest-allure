@@ -59,3 +59,25 @@ class ApiCase:
 
     def __str__(self) -> str:
         return json.dumps(self.__dict__)
+
+
+class TestCase:
+    data = []
+
+    def __init__(self, d):
+        self.title = str
+        self.data = []
+        self.__dict__ = d
+
+
+class TestCaseData:
+    def __init__(self, d):
+        self.title = str
+        self.id = '1'
+        self.path = str
+        self.params = {}
+        self.headers = {}
+        self.body = ''
+        self.post_script = str
+        self.pre_script = ''
+        self.__dict__ = d

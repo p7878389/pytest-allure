@@ -18,6 +18,10 @@ from Runner.test_runner import parse_api_case_json
 
 @pytest.fixture(scope='session')
 def setup():
+    project_root = dirname(dirname(abspath(__file__)))
+    report_path = os.path.join(project_root, "Report\\allure_raw")
+    if not os.path.exists(report_path):
+        os.makedirs(report_path)
     parse_api_case_json()
     project_root = dirname(dirname(abspath(__file__)))
     login_api_case_file_path = os.path.join(project_root, 'TestCase\\' + 'login.json')

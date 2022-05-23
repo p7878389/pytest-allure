@@ -10,11 +10,10 @@ from os.path import dirname, abspath
 import pytest
 import requests
 
-from Config.yaml_read import case_to_object
 from BaseRequest.base_request import BaseRequest
+from Config.yaml_read import case_to_object
 from Runner.test_runner import init_allure_properties
-from Runner.test_runner import load_system_yaml
-from Runner.conftest import setup
+from Common.read_test_case import load_system_yaml
 
 test_case_file_name = 'Admin/clover_api_key.json'
 
